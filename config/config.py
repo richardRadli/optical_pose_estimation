@@ -29,12 +29,28 @@ class CameraAndCalibrationConfig:
         return self.opt
 
 
-class PoseEstimationConfig:
+class FeatureMatchingConfig:
     def __init__(self):
         self.opt = None
         self.parser = argparse.ArgumentParser()
 
         self.parser.add_argument('--size_coefficient', type=int, default=1)
+
+        self.parser.add_argument('--kernel_size', type=tuple, default=(5, 5))
+        self.parser.add_argument('--dp', type=int, default=1)
+        self.parser.add_argument("--minDist", type=int, default=20)
+        self.parser.add_argument('--param1', type=int, default=50)
+        self.parser.add_argument("--param2", type=int, default=30)
+        self.parser.add_argument("--minRadius", type=int, default=15)
+        self.parser.add_argument("--maxRadius", type=int, default=40)
+
+        self.parser.add_argument("--nfeatures", type=int, default=0)
+        self.parser.add_argument("--nOctaveLayers", type=int, default=5)
+        self.parser.add_argument("--contrastThreshold", type=float, default=0.05)
+        self.parser.add_argument("--edgeThreshold", type=int, default=40)
+        self.parser.add_argument("--sigma", type=float, default=1.0)
+        self.parser.add_argument("--min_match_count", type=int, default=25)
+        self.parser.add_argument("--threshold", type=float, default=0.6)
 
     def parse(self):
         self.opt = self.parser.parse_args()
