@@ -34,7 +34,7 @@ class PoseEstimationConfig:
         self.opt = None
         self.parser = argparse.ArgumentParser()
 
-        self.parser.add_argument('--size_coefficient', type=int, default=2)
+        self.parser.add_argument('--size_coefficient', type=int, default=1)
 
     def parse(self):
         self.opt = self.parser.parse_args()

@@ -45,13 +45,25 @@ class Images(_Const):
             "images/camera/calibration_images",
 
         "chessboard_images":
-            "images/camera/calibration_images",
+            "images/camera/chessboard_images",
 
         "motherboard_images":
-            "images/camera/calibration_images",
+            "images/camera/motherboard_images",
 
-        "undistorted_images":
-            "images/camera/undistorted_images",
+        "undistorted_calibration_images":
+            "images/objects/calibration_images",
+
+        "undistorted_chessboard_images":
+            "images/objects/chessboard_images",
+
+        "undistorted_motherboard_images":
+            "images/objects/motherboard_images",
+
+        "roi_images":
+            "images/pose_estimation/roi_images",
+
+        "pairing_images":
+            "images/pose_estimation/pairing_images"
     }
 
     def __init__(self):
@@ -74,7 +86,10 @@ class Data(_Const):
             "data/camera/camera_settings",
 
         "model_coordinates":
-            "data/model_coordinates"
+            "data/model_coordinates",
+
+        "mounting_hole_center_points":
+            "data/pose_estimation/mounting_hole_center_points"
     }
 
     def __init__(self):

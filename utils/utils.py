@@ -1,12 +1,28 @@
 import colorlog
+import json
 import logging
+import numpy as np
 import os
+import time
 import re
 
+from functools import wraps
 from typing import List, Union
 
 from datetime import datetime
 from pathlib import Path
+
+
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return super(NumpyEncoder, self).default(obj)
 
 
 def create_dir(root_dir, timestamp):
@@ -74,6 +90,28 @@ def find_latest_subdir(directory):
     latest_subdir = max(subdirectories, key=lambda d: os.path.getmtime(os.path.join(directory, d)))
 
     return os.path.join(directory, latest_subdir)
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# ------------------------------------- M E A S U R E   E X E C U T I O N   T I M E ------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+def measure_execution_time(func):
+    """
+    Decorator to measure the execution time.
+
+    :param func:
+    :return:
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        logging.info(f"Execution time of {func.__name__}: {execution_time:.4f} seconds")
+        return result
+    return wrapper
 
 
 # ----------------------------------------------------------------------------------------------------------------------

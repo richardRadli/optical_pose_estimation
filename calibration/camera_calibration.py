@@ -34,7 +34,7 @@ class CameraCalibration:
         source_images = find_latest_subdir(camera_config().get("calibration_images"))
         self.original_images_list = file_reader(source_images, "jpg")
         self.save_data_path = create_dir(camera_config().get("camera_matrix"), timestamp)
-        self.undistorted_images_path = create_dir(camera_config().get("undistorted_images"), timestamp)
+        self.undistorted_images_path = create_dir(camera_config().get("undistorted_calibration_images"), timestamp)
 
     # ---------------------------------------------------------------------------------------------------------------- #
     # -------------------------------------------- F I N D   C O R N E R S ------------------------------------------- #

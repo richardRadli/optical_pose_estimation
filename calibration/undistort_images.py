@@ -25,8 +25,8 @@ class UndistortImages:
         self.undistorted_camera_matrix = data["undistorted_camera_matrix"]
         self.roi = data["roi"]
 
-        self.input_dir = self.get_input_dir(self.camera_cfg.operation)
-        self.output_dir = create_dir(camera_config().get("undistorted_images"), timestamp)
+        self.input_dir, output_dir = self.get_input_dir(self.camera_cfg.operation)
+        self.output_dir = create_dir(output_dir, timestamp)
 
     @staticmethod
     def get_input_dir(operation):
@@ -40,9 +40,21 @@ class UndistortImages:
         }
 
         if operation not in input_dir.keys():
-            raise ValueError(f"Operation {operation} not in the list!")
+            raise ValueError(f"Operation {operation} not in the input directory list!")
 
-        return input_dir[operation]
+        output_dir = {
+            "undistorted_calibration_images":
+                camera_config().get(operation),
+            "undistorted_chessboard_images":
+                find_latest_subdir(camera_config().get(operation)),
+            "undistorted_motherboard_images":
+                find_latest_subdir(camera_config().get(operation))
+        }
+
+        if operation not in output_dir.keys():
+            raise ValueError(f"Operation {operation} not in the output directory list!")
+
+        return input_dir[operation], output_dir[operation]
 
     def process_image(self, image_path: str, output_path: str) -> None:
         image = cv2.imread(image_path)
