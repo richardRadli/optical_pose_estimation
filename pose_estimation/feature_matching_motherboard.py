@@ -8,10 +8,10 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
 from typing import Tuple, List, Any
 
-from config.config_selector import camera_config, pose_estimation_config
+from config.config_selector import camera_config, feature_matching_config
 from config.config import FeatureMatchingConfig
 from utils.utils import (create_dir, create_timestamp, find_latest_file_in_latest_directory, find_latest_subdir,
-                         file_reader, measure_execution_time, NumpyEncoder, sort_dict_by_keys)
+                         file_reader, measure_execution_time, NumpyEncoder)
 
 
 class FeatureMatchingMotherboard:
@@ -38,18 +38,18 @@ class FeatureMatchingMotherboard:
 
         if create_roi_images:
             self.roi_images_path = (
-                create_dir(root_dir=pose_estimation_config().get("roi_images"),
+                create_dir(root_dir=feature_matching_config().get("roi_images"),
                            timestamp=timestamp)
             )
         else:
-            self.roi_images_path = find_latest_subdir(pose_estimation_config().get("roi_images"))
+            self.roi_images_path = find_latest_subdir(feature_matching_config().get("roi_images"))
 
         self.pairing_images_path = (
-            create_dir(pose_estimation_config().get("pairing_images"),
+            create_dir(feature_matching_config().get("pairing_images"),
                        timestamp)
         )
         self.mounting_hole_center_points_path = (
-            create_dir(pose_estimation_config().get("mounting_hole_center_points"),
+            create_dir(feature_matching_config().get("mounting_hole_center_points"),
                        timestamp)
         )
 
@@ -326,6 +326,7 @@ class FeatureMatchingMotherboard:
             processed_points[key] = [coord[0] for coord in value]
 
         processed_points = dict(sorted(processed_points.items()))
+        processed_points = [[int(a) for a in b[0]] for b in processed_points.values()]
 
         with open(output_json_filename, "w") as json_file:
             json.dump(processed_points, json_file, cls=NumpyEncoder)
@@ -344,7 +345,7 @@ class FeatureMatchingMotherboard:
 
 if __name__ == "__main__":
     try:
-        feature_matching = FeatureMatchingMotherboard(create_roi_images=False)
+        feature_matching = FeatureMatchingMotherboard(create_roi_images=True)
         feature_matching.main()
     except KeyboardInterrupt as kie:
         logging.error(f"{kie}")

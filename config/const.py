@@ -63,7 +63,13 @@ class Images(_Const):
             "images/pose_estimation/roi_images",
 
         "pairing_images":
-            "images/pose_estimation/pairing_images"
+            "images/pose_estimation/pairing_images",
+
+        "object_camera_cord_sys":
+            "images/pose_estimation/object_camera_cord_sys",
+
+        "object_camera_world_sys":
+            "images/pose_estimation/object_camera_world_sys"
     }
 
     def __init__(self):

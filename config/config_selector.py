@@ -1,3 +1,5 @@
+import os
+
 from typing import Dict
 
 from config.const import DATA_PATH, IMAGES_PATH
@@ -26,8 +28,8 @@ def camera_config() -> Dict:
     return cam_config
 
 
-def pose_estimation_config() -> Dict:
-    pose_est = {
+def feature_matching_config() -> Dict:
+    feature_matching = {
         "roi_images":
             IMAGES_PATH.get_data_path("roi_images"),
         "pairing_images":
@@ -36,4 +38,19 @@ def pose_estimation_config() -> Dict:
             DATA_PATH.get_data_path("mounting_hole_center_points")
     }
 
-    return pose_est
+    return feature_matching
+
+
+def pose_estimation_config() -> Dict:
+    pose_estimation = {
+        "chessboard_model_points":
+            os.path.join(DATA_PATH.get_data_path("model_coordinates"), "chessboard_coordinates.json"),
+        "motherboard_model_points":
+            os.path.join(DATA_PATH.get_data_path("model_coordinates"), "motherboard_coordinates.json"),
+        "object_camera_cord_sys":
+            IMAGES_PATH.get_data_path("object_camera_cord_sys"),
+        "object_camera_world_sys":
+            IMAGES_PATH.get_data_path("object_camera_world_sys")
+    }
+
+    return pose_estimation

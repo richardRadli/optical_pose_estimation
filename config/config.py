@@ -55,3 +55,16 @@ class FeatureMatchingConfig:
     def parse(self):
         self.opt = self.parser.parse_args()
         return self.opt
+
+
+class PoseEstimationConfig:
+    def __init__(self):
+        self.opt = None
+        self.parser = argparse.ArgumentParser()
+
+        self.parser.add_argument('--chessboard_type', type=str, default="A3", choices=["A3", "A4"])
+        self.parser.add_argument('--motherboard_type', type=str, default="ATX", choices=["ATX", "mATX"])
+
+    def parse(self):
+        self.opt = self.parser.parse_args()
+        return self.opt
