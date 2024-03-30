@@ -5,6 +5,7 @@ import os
 
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from tqdm import tqdm
+from typing import Tuple, Optional
 
 from config.config import CameraAndCalibrationConfig
 from config.config_selector import camera_config
@@ -36,10 +37,20 @@ class CameraCalibration:
         self.save_data_path = create_dir(camera_config().get("camera_matrix"), timestamp)
         self.undistorted_images_path = create_dir(camera_config().get("undistorted_calibration_images"), timestamp)
 
-    # ---------------------------------------------------------------------------------------------------------------- #
-    # -------------------------------------------- F I N D   C O R N E R S ------------------------------------------- #
-    # ---------------------------------------------------------------------------------------------------------------- #
-    def find_corners(self, thread_id: int, image_name: str):
+    def find_corners(self, thread_id: int, image_name: str) -> Tuple[Optional[np.ndarray], Tuple[str, np.ndarray]]:
+        """
+        Finds corners of a chessboard pattern in an image.
+
+        Args:
+            thread_id (int): The ID of the thread.
+            image_name (str): The filename of the image.
+
+        Returns:
+            Tuple[Optional[np.ndarray], Tuple[str, np.ndarray]]: A tuple containing:
+                - The corner results if corners are found, otherwise None.
+                - A tuple containing the image name and the image data.
+        """
+
         name = f"thr-{thread_id}"
         corner_results = None
 
@@ -61,6 +72,13 @@ class CameraCalibration:
         return corner_results, image_data
 
     def calibration(self) -> None:
+        """
+        Performs camera calibration using chessboard images.
+
+        Returns:
+            None
+        """
+
         accepted = 0
 
         with ThreadPoolExecutor() as executor:
@@ -107,8 +125,26 @@ class CameraCalibration:
     # --------------------------------------- U N D I S T O R T   A N D   S A V E ------------------------------------ #
     # ---------------------------------------------------------------------------------------------------------------- #
     @staticmethod
-    def undistort_and_save(name: str, image, matrix, distortion_coefficients, undistorted_matrix, roi,
-                           undistorted_images_path: str) -> None:
+    def undistort_and_save(name: str, image: np.ndarray, matrix: np.ndarray,
+                           distortion_coefficients: np.ndarray, undistorted_matrix: np.ndarray,
+                           roi, undistorted_images_path: str) -> None:
+        """
+        Undistorts an image using camera matrix and distortion coefficients,
+        crops the region of interest (ROI), and saves the undistorted image.
+
+        Args:
+            name (str): The name of the image file.
+            image (np.ndarray): The input image.
+            matrix (np.ndarray): The camera matrix.
+            distortion_coefficients (np.ndarray): The distortion coefficients.
+            undistorted_matrix (np.ndarray): The undistorted matrix.
+            roi: The region of interest (x, y, width, height).
+            undistorted_images_path (str): The path to save the undistorted image.
+
+        Returns:
+            None
+        """
+
         image = cv2.undistort(image, matrix, distortion_coefficients, None, undistorted_matrix)
         x, y, w, h = roi
         image = image[y:y + h, x:x + w]
@@ -119,6 +155,13 @@ class CameraCalibration:
     # ------------------------------- G E N E R A T E   N E W   C A M E R A   M A T R I X ---------------------------- #
     # ---------------------------------------------------------------------------------------------------------------- #
     def generate_new_camera_matrix(self) -> None:
+        """
+        Generates a new camera matrix and saves the calibration data.
+
+        Returns:
+            None
+        """
+
         logging.info('----- O B T A I N I N G   N E W   C A M E R A   M A T R I X-----')
         name, img = self.original_images[0]
         height, width = img.shape[:2]
@@ -168,6 +211,9 @@ class CameraCalibration:
     def undistort_calibration_images(self) -> None:
         """
         Undistorts every image used during calibration and saves them in the appropriate folder.
+
+        Returns:
+            None
         """
 
         with ThreadPoolExecutor() as executor:
@@ -185,7 +231,14 @@ class CameraCalibration:
     # ---------------------------------------------------------------------------------------------------------------- #
     # ---------------------------------------------------- M A I N --------------------------------------------------- #
     # ---------------------------------------------------------------------------------------------------------------- #
-    def main(self):
+    def main(self) -> None:
+        """
+        Main function to perform camera calibration and undistortion.
+
+        Returns:
+            None
+        """
+
         self.calibration()
         self.generate_new_camera_matrix()
         if self.camera_cfg.undistort:

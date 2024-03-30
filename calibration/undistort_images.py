@@ -4,6 +4,7 @@ import logging
 import numpy as np
 
 from concurrent.futures import ThreadPoolExecutor
+from typing import Tuple
 
 from config.config import CameraAndCalibrationConfig
 from config.config_selector import camera_config
@@ -29,7 +30,17 @@ class UndistortImages:
         self.output_dir = create_dir(output_dir, timestamp)
 
     @staticmethod
-    def get_input_dir(operation):
+    def get_input_dir(operation: str) -> Tuple[str, str]:
+        """
+        Gets input and output directories based on the specified operation.
+
+        Args:
+            operation (str): The type of operation.
+
+        Returns:
+            Tuple[str, str]: A tuple containing the input and output directories.
+        """
+        
         input_dir = {
             "calibration_images":
                 find_latest_subdir(camera_config().get(operation)),
@@ -57,6 +68,17 @@ class UndistortImages:
         return input_dir[operation], output_dir[operation]
 
     def process_image(self, image_path: str, output_path: str) -> None:
+        """
+        Processes an image by undistorting it and saving the result.
+
+        Args:
+            image_path (str): The path to the input image.
+            output_path (str): The path to save the undistorted image.
+
+        Returns:
+            None
+        """
+        
         image = cv2.imread(image_path)
         undistorted_image = cv2.undistort(src=image,
                                           cameraMatrix=self.camera_matrix,
@@ -70,6 +92,13 @@ class UndistortImages:
         logging.info(f"Image saved to {output_path}")
 
     def undistort_images(self) -> None:
+        """
+        Undistorts a batch of images concurrently.
+
+        Returns:
+            None
+        """
+        
         with ThreadPoolExecutor(max_workers=self.camera_cfg.cpu_threads) as executor:
             image_paths = [os.path.join(self.input_dir, filename) for filename in os.listdir(self.input_dir)]
             output_path = [os.path.join(self.output_dir, os.path.basename(path)) for path in image_paths]

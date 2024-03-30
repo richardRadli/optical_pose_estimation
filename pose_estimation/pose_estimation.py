@@ -39,7 +39,8 @@ class PoseEstimation:
             pose_estimation_config().get("motherboard_model_points")
         )
 
-        self.undistorted_camera_mtx = np.load(undistorted_camera_mtx_path, allow_pickle=True)[0]
+        data = np.load(undistorted_camera_mtx_path)
+        self.undistorted_camera_mtx = data["undistorted_camera_matrix"]
         self.motherboard_image = cv2.imread(motherboard_image_path, cv2.IMREAD_COLOR)
         self.chessboard_image = cv2.imread(chessboard_image_path, cv2.IMREAD_COLOR)
 

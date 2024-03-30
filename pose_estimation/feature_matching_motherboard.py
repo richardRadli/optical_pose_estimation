@@ -281,6 +281,9 @@ class FeatureMatchingMotherboard:
     def matching(self) -> None:
         """
         Process ROI images using ThreadPoolExecutor for parallel execution.
+
+        Returns:
+            None
         """
 
         roi_images = file_reader(self.roi_images_path, extension="jpg")
@@ -333,6 +336,7 @@ class FeatureMatchingMotherboard:
 
     def main(self) -> None:
         """
+        Executes the feature matching.
 
         Returns:
              None
