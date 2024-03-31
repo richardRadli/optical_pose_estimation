@@ -30,7 +30,7 @@ and image undistortion.
 
 <figure align="center">
   <figcaption>Calibration phase</figcaption>
-  <img src="images/calibration.png" alt="training_fcnn" width="1000"/>
+  <img src="images/calibration.png" alt="calibration" width="1000"/>
 </figure>
 
 In the second stage, the feature extraction is realized with
@@ -39,7 +39,7 @@ homography).
 
 <figure align="center">
   <figcaption>Feature matching phase</figcaption>
-  <img src="images/feature_matching.png" alt="training_fcnn" width="1000"/>
+  <img src="images/feature_matching.png" alt="fm" width="1000"/>
 </figure>
 
 The last stage is where the measurement is actually carried out.
@@ -49,7 +49,7 @@ the object by further calculations.
 
 <figure align="center">
   <figcaption>Pose estimation phase</figcaption>
-  <img src="images/pose_est.png" alt="training_fcnn" width="1000"/>
+  <img src="images/pose_est.png" alt="pose_est" width="1000"/>
 </figure>
 
 ## Requriments
@@ -126,7 +126,7 @@ of the circles.
 
 <figure align="center">
   <figcaption>Example for a ROI image</figcaption>
-  <img src="images/roi_0.jpg" alt="training_fcnn" width="200"/>
+  <img src="images/roi_0.jpg" alt="roi" width="200"/>
 </figure>
 
 If no ROI images are present, first you have to select them in a strict order. After all mounting holes are selected,
@@ -134,7 +134,7 @@ the program will find the centers of these holes, in pixel coordinates, and will
 
 <figure align="center">
   <figcaption>Example for a pairing</figcaption>
-  <img src="images/pairing_0.jpg" alt="training_fcnn" width="2000"/>
+  <img src="images/pairing_0.jpg" alt="pairing" width="2000"/>
 </figure>
 
 ### Pose estimation
@@ -153,5 +153,5 @@ system.
 
 <figure align="center">
   <figcaption>Pose of the object</figcaption>
-  <img src="images/object_camera_cord_sys.jpg" alt="training_fcnn" width="2000"/>
+  <img src="images/object_camera_cord_sys.jpg" alt="pose" width="2000"/>
 </figure>
