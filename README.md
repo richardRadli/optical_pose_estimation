@@ -82,7 +82,7 @@ root_mapping = {
 }
 ```
 
-Change the key in the dict and the path accordingly. Key should be your username in your OS. Select a path where you 
+Change the key in the dict and the path accordingly. Key should be your username as it is in your OS. Select a path where you 
 would like to save images and other data. Also, it has to be an existing folder.
 
 ## How to use
